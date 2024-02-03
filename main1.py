@@ -2,7 +2,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import csv
-import random
+
+
 #leemos los datos
 def leer_csv(ruta, indice):
     #Función encargada en leer y asignar los nombres de las columnas correspondientes
@@ -13,7 +14,7 @@ def leer_csv(ruta, indice):
 
 
 #Leemos cada csv y creamos los DataFrames correspondientes
-df_equipo = leer_csv('equipo.csv', ['nombre', 'img', 'pais', 'numero'])
+df_equipo = leer_csv('equipo.csv', ['nombre', 'img', 'pais', 'id'])
 df_partidos = leer_csv('partidos.csv', ['dia', 'equipo1', 'equipo2', 'numero1', 'numero2', 'numero3'])
 
 #Vemos la información de cada DataFrame
@@ -34,24 +35,29 @@ print(df_partidos.head())
 
 #Vamos a hacer un análisis de los datos
 
-#Ordenamos los equipos por numero
-df_equipo = df_equipo.sort_values(by='numero', ascending=True)
-print('\n'+'Ordenamos los equipos por número:')
-print(df_equipo.head())
+#Juntamos los dos DataFrames
+df = df_partidos.merge(df_equipo, left_on='equipo1', right_on='id')
+print('\n'+'DataFrame final:')
+print(df)
 
-#Calculamos la media de goles por partido
-media_goles = (df_partidos['goles1'] + df_partidos['goles2']).mean()
-print('\n'+'Media de goles por partido:', media_goles)
+#Agrupamos según el id y sumamos los goles de cada equipo
+goles_totales1 = df.groupby('id')['goles1'].sum().reset_index()
+goles_totales2 = df.groupby('id')['goles2'].sum().reset_index()
+#Juntamos los dos dataframe en 1
+goles_totales = goles_totales1 + goles_totales2
+print(goles_totales)
 
-#Calculamos el equipo con más y menos goles
+#Calculamos la media de goles por id
+media_goles = goles_totales.mean()
+print('\n'+'Media de goles por id:', media_goles)
 
-df_equipo['goles'] = df_equipo['numero'] * 2
-print('\n'+'Equipo con más goles:', df_equipo[df_equipo['goles'] == df_equipo['goles'].max()])
-print('\n'+'Equipo con menos goles:', df_equipo[df_equipo['goles'] == df_equipo['goles'].min()])
+#Calculamos el id con más y menos goles
+print('\n'+'Id con más goles:', goles_totales[goles_totales['goles'] == goles_totales['goles'].max()])
+print('\n'+'Id con menos goles:', goles_totales[goles_totales['goles'] == goles_totales['goles'].min()])
 
 #Varianza y desviación estándar de los goles
-varianza_goles = (df_partidos['goles1'] + df_partidos['goles2']).var()
-desviacion_goles = (df_partidos['goles1'] + df_partidos['goles2']).std()
+varianza_goles = goles_totales['goles'].var()
+desviacion_goles = goles_totales['goles'].std()
 print('\n'+'Varianza de los goles:', varianza_goles)
 print('\n'+'Desviación estándar de los goles:', desviacion_goles)
 
@@ -64,3 +70,22 @@ plt.ylabel('Número de Equipos')
 plt.title('Número de Equipos por País')
 plt.tight_layout()
 plt.show()
+
+#Representación de los goles por equipo
+plt.bar(goles_totales['id'], goles_totales['goles'])
+plt.xlabel('Id')
+plt.ylabel('Número de Goles')
+plt.title('Número de Goles por Id')
+plt.tight_layout()
+plt.show()
+
+#Representación de los goles por país
+df = df.merge(df_equipo, left_on='equipo1', right_on='id')
+plt.bar(df['pais'].value_counts().index, df['pais'].value_counts())
+plt.xticks(rotation=45, ha='right')  # Ajusta la rotación y alineación horizontal de los nombres
+plt.xlabel('País')
+plt.ylabel('Número de Goles')
+plt.title('Número de Goles por País')
+plt.tight_layout()
+plt.show()
+

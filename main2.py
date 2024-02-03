@@ -8,7 +8,9 @@ df_ganador = pd.read_csv('winner.csv', encoding='utf-8', delimiter=',')
 
 #Vemos la información de cada DataFrame
 print(df_goles.info())
+print(df_goles.columns)
 print(df_ganador.info())
+print(df_ganador.columns)
 #No hay ningún valor nulo
 
 #Agrupamos por team y hacemos la media del minuto

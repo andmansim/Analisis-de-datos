@@ -27,6 +27,7 @@ print(df_goles_media)
 
 plt.bar(df_goles_media.index, df_goles_media['minute'])
 plt.xticks(rotation=45, ha='right')
+plt.subplots_adjust(left=0.1, bottom=0.3, right=0.9, top=0.9)
 plt.show()
 
 
@@ -39,12 +40,14 @@ df_ganadorhome = df_ganadorhome.sort_values(ascending=False)
 df_ganadorhome = df_ganadorhome.head(15)
 plt.bar(df_ganadorhome.index, df_ganadorhome)
 plt.xticks(rotation=45, ha='right')
+plt.subplots_adjust(left=0.1, bottom=0.3, right=0.9, top=0.9)
 plt.show()
 
 df_ganadoraway = df_ganadoraway.sort_values(ascending=False)
 df_ganadoraway = df_ganadoraway.head(15)
 plt.bar(df_ganadoraway.index, df_ganadoraway)
 plt.xticks(rotation=45, ha='right')
+plt.subplots_adjust(left=0.1, bottom=0.3, right=0.9, top=0.9)
 plt.show()
 
 

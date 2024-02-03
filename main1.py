@@ -40,11 +40,14 @@ df = df_partidos.merge(df_equipo, left_on='equipo1', right_on='id')
 print('\n'+'DataFrame final:')
 print(df)
 
-#Agrupamos según el id y sumamos los goles de cada equipo
+#Agrupamos según el id y sumamos los goles de cada equipo por separado
 goles_totales1 = df.groupby('id')['goles1'].sum().reset_index()
 goles_totales2 = df.groupby('id')['goles2'].sum().reset_index()
-#Juntamos los dos dataframe en 1
-goles_totales = goles_totales1 + goles_totales2
+
+#Juntamos los dos dataframe en 1 para obtener los goles totales de todos los equipos
+goles_totales = pd.merge(goles_totales1, goles_totales2, on='id')
+goles_totales['goles'] = goles_totales['goles1'] + goles_totales['goles2']
+print('\n' + 'goles totales de cada equipo')
 print(goles_totales)
 
 #Calculamos la media de goles por id
@@ -80,7 +83,7 @@ plt.tight_layout()
 plt.show()
 
 #Representación de los goles por país
-df = df.merge(df_equipo, left_on='equipo1', right_on='id')
+df = pd.merge(df_equipo, goles_totales, on = 'id')
 plt.bar(df['pais'].value_counts().index, df['pais'].value_counts())
 plt.xticks(rotation=45, ha='right')  # Ajusta la rotación y alineación horizontal de los nombres
 plt.xlabel('País')

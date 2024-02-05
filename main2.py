@@ -1,8 +1,9 @@
+#Analizamos los datos de los csv goles.csv y winner.csv
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-
+#Leemos los csv
 df_goles = pd.read_csv('goles.csv', encoding='utf-8', delimiter=',')
 df_ganador = pd.read_csv('winner.csv', encoding='utf-8', delimiter=',')
 
@@ -48,6 +49,9 @@ representar_barras(df_ganadoraway.index, df_ganadoraway)
 
 
 
+#Hacemos un análisis de los datos
+
+print('\n'+ 'Análisis de los datos:')
 #Contamos las veces que ha ganado cada equipo
 print('\n'+ 'Las veces que ha ganado cada equipo:')
 df_ganador = df_ganador['winner'].value_counts()
@@ -57,4 +61,16 @@ print(df_ganador)
 print('\n'+ 'Ranking de goles de cada jugador:')
 df_golesjugadores = df_goles['scorer'].value_counts()
 print(df_golesjugadores)
+
+#Media de goles por minuto
+media_goles = df_goles['minute'].mean()
+print('\n'+'Media de goles por minuto:', media_goles)
+
+#Varianza y desviación estándar de los goles
+varianza_goles = df_goles['minute'].var()
+desviacion_goles = df_goles['minute'].std()
+print('\n'+'Varianza de los goles:', varianza_goles)
+print('\n'+'Desviación estándar de los goles:', desviacion_goles)
+
+
 

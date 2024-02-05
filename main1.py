@@ -1,3 +1,4 @@
+#Analizamos los datos de los csv equipo.csv y partidos.csv
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
